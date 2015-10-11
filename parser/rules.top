@@ -1,0 +1,11 @@
+module fam.rules;
+import fam.types;
+import std.algorithm : min, max;
+
+/// a rule is a function that associates input fitnesses to output fitnesses
+alias Rule = Fitness function(Fitnesses);
+
+///our array of rules
+Rule[][string] rules;
+
+static this() {

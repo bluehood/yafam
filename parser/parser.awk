@@ -1,5 +1,19 @@
 #!/usr/bin/awk -f
 
+# Brutal awk parser that converts textual rules into D functions.
+#
+# The input file must have one rule per line, and rules must have the form
+# EXPRESSION => OUTCLASS, where OUTCLASS is the (fully qualified) name
+# of the fuzzy class to which the expression is associated, and
+# EXPRESSION can be any combination of and/or operations on (fully qualified)
+# input variable classes.
+#
+# EXAMPLE:
+# "i1.c1 or i2.c1 => o1.c2" is a rule that is converted into the lines:
+# rules["o1.c2"] = function Fitness(Fitnesses f) {
+#    return max(f["i1.c1"],f["i2.c1"]);
+# }
+
 function parse(string, ss, toks, f) {
 
    if(index(string, "(") != 0) {
@@ -26,12 +40,12 @@ function parse(string, ss, toks, f) {
 
 {
    split($0,ss," => ");
-   header = "Fitness rule"++n"(Fitnesses f) {";
+   header = "function Fitness(Fitnesses f) {";
    result = parse(ss[1]);
    gsub(/\[/,"(",result);
    gsub(/\]/,")",result);
    gsub(/\{/,"[",result);
    gsub(/\}/,"]",result);
-   body = "\t return " result ";";
-   print header "\n" body "\n}\nrules[\"" ss[2] "\"] = rule" n ";";
+   body = "\treturn " result ";";
+   print "rules[\"" ss[2] "\"] ~= " header "\n" body "\n};"
 }

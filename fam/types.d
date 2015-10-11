@@ -25,18 +25,11 @@ class FuzzyClass {
 	const double[4] delimiters;
 }
 
-/// FuzzyVar represents a variable with a set of FuzzyClasses
-/// it can belong to. They implicitly define its range.
-/*class FuzzyVar {
-	this(string name, FuzzyClass[] classes) {
-		this.name = name;
-		this.classes = classes;
-	}
-
-	const string name;
-	const FuzzyClass[] classes;
-}*/
-
+/// an associative array from fully qualified class name to fitness
 alias Fitnesses = Fitness[string];
-alias RawInput = double[string];
+/// an associative array from variable name to input value
+alias RawInput = double[string]; 
+/// the type of our fitness
 alias Fitness = double;
+/// a rule is a function that associates input fitnesses to output fitnesses
+alias Rule = Fitness function(Fitnesses);

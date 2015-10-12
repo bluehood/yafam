@@ -1,4 +1,4 @@
-#!/usr/bin/awk -f
+#!/usr/bin/gawk -f
 
 # Brutal awk parser that converts textual rules into D functions.
 #

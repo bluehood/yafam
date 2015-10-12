@@ -1,12 +1,12 @@
 module fam.types;
 
-import std.algorithm : sort;
+import std.algorithm : sort, isSorted, sum;
 debug import std.stdio : writef;
 
 /// an associative array from fully qualified class name to fitness
 alias Fitnesses = Fitness[string];
-/// an associative array from variable name to input value
-alias RawInput = double[string]; 
+/// an associative array from variable name to data value
+alias RawData = double[string]; 
 /// the type of our fitness
 alias Fitness = double;
 /// a rule is a function that associates input fitnesses to output fitnesses
@@ -36,6 +36,14 @@ class FuzzyClass {
 			return (delimiters[3] - x) / (delimiters[3] - delimiters[2]);
 	}
 
+	@property
+	double mean() pure const {
+		return sum(cast(double[])(delimiters)) / 4;
+	}
+
 	const string name;
 	const double[4] delimiters;
+	invariant {
+		assert(isSorted(cast(double[])(delimiters)));
+	}
 }

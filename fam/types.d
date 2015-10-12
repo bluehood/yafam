@@ -1,16 +1,31 @@
 module fam.types;
 
+import std.algorithm : sort;
+debug import std.stdio : writef;
+
+/// an associative array from fully qualified class name to fitness
+alias Fitnesses = Fitness[string];
+/// an associative array from variable name to input value
+alias RawInput = double[string]; 
+/// the type of our fitness
+alias Fitness = double;
+/// a rule is a function that associates input fitnesses to output fitnesses
+alias Rule = Fitness function(Fitnesses);
+
 /// FuzzyClass is a named range of values for a variable.
 /// It is defined by a name and 4 delimiter values, which
 /// define a trapezoid (which is the shape of the 'class function').
 class FuzzyClass {
 	this(string name, double[4] delimiters) {
 		this.name = name;
-		this.delimiters = delimiters;
-		// TODO: sort delimiters
+		// Sort delimiters
+		double[] tmp = delimiters;
+		sort(tmp);
+		this.delimiters = tmp;
+		debug writef("[class %s] delimiters: %s\n", this.name, this.delimiters);
 	}
 
-	Fitness fit(double x) pure {
+	Fitness fit(double x) pure const {
 		if (x <= delimiters[0] || x >= delimiters[3]) 
 			return 0;
 		if (x >= delimiters[1] && x <= delimiters[2]) 
@@ -24,12 +39,3 @@ class FuzzyClass {
 	const string name;
 	const double[4] delimiters;
 }
-
-/// an associative array from fully qualified class name to fitness
-alias Fitnesses = Fitness[string];
-/// an associative array from variable name to input value
-alias RawInput = double[string]; 
-/// the type of our fitness
-alias Fitness = double;
-/// a rule is a function that associates input fitnesses to output fitnesses
-alias Rule = Fitness function(Fitnesses);

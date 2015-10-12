@@ -9,4 +9,7 @@ if (( $# < 1 )); then
    exit 1;
 fi
 
-./parser.awk "$@" | cat "$TOP" - "$BOTTOM" > "$TARGET"
+echo -e "// Created by $0 at $(date)\n// from $(realpath $1)" > $TARGET
+./parser.awk "$@" | cat "$TOP" - "$BOTTOM" >> "$TARGET"
+
+echo "Created $(realpath $TARGET)." >&2

@@ -1,2 +1,5 @@
 *.swp
 *~
+*.o
+a.out
+fam/rules.d

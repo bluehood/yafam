@@ -24,12 +24,12 @@ function parse(string, ss, toks, f) {
 
    if(index(string, " or ") != 0) {
       match(string, /(.*) or (.*)/, ss);
-      return "max[" parse(ss[1]) "," parse(ss[2]) "]";
+      return "max[" parse(ss[1]) ", " parse(ss[2]) "]";
    }
 
    if(index(string, " and ") != 0) {
       match(string, /(.*) and (.*)/, ss);
-      return "min[" parse(ss[1]) "," parse(ss[2]) "]";
+      return "min[" parse(ss[1]) ", " parse(ss[2]) "]";
    }
 
    if(index(string, "min[") == 0 && index(string, "max[") == 0)
@@ -38,7 +38,7 @@ function parse(string, ss, toks, f) {
       return string;
 }
 
-{
+/^[^#]/ {
    split($0,ss," => ");
    header = "function Fitness(Fitnesses f) {";
    result = parse(ss[1]);

@@ -1,7 +1,6 @@
 module fam.fuzzifier;
 
 import fam.types;
-import std.array : split;
 
 class FamComponent(R, T) {
 	this(FuzzyClass[][string] classes) pure {
@@ -25,7 +24,7 @@ class FamComponent(R, T) {
 /// auto fitnesses = f(data);
 /// \endcode
 class Fuzzifier : FamComponent!(Fitnesses, RawData) {
-	/// \param vars The input variables' classes
+	/// \param classes The input variables' classes
 	this(FuzzyClass[][string] classes) pure { super(classes); }
 
 	/// Converts raw input data (passed as a map

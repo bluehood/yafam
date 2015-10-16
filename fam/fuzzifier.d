@@ -3,13 +3,32 @@ module fam.fuzzifier;
 import fam.types;
 
 class FamComponent(R, T) {
+	/// Constructs a fam component without classes.
+	/// Classes can be added later via `setVar()`
+	package this() {}
+
+	/// \param classes The input variables' classes
 	this(FuzzyClass[][string] classes) pure {
 		this.classes = classes;
 	}
 
+	/// Sets a list of classes for a variable. If that variable
+	/// was already in this component, it gets replaced.
+	package void setVar(string varname, FuzzyClass[] classes) {
+		this.classes[varname] = classes;
+	}
+
 	abstract R opCall(T data);
 
-	protected const FuzzyClass[][string] classes;
+	protected FuzzyClass[][string] classes;
+}
+
+private mixin template famComponentChild() {
+	package this() {}
+
+	this(FuzzyClass[][string] classes) pure {
+		super(classes);
+	}
 }
 
 /// A component which converts raw input into fuzzified input.
@@ -24,8 +43,7 @@ class FamComponent(R, T) {
 /// auto fitnesses = f(data);
 /// \endcode
 class Fuzzifier : FamComponent!(Fitnesses, RawData) {
-	/// \param classes The input variables' classes
-	this(FuzzyClass[][string] classes) pure { super(classes); }
+	mixin famComponentChild;
 
 	/// Converts raw input data (passed as a map
 	/// varname => value) into a Fitnesses result.
@@ -56,25 +74,19 @@ class Fuzzifier : FamComponent!(Fitnesses, RawData) {
 	}
 }
 
-enum DefuzzType {
-	WeightedMean,
-	Areas
-}
-
 /// A component which combines a set of fitnesses to form a raw output.
 /// Input fitnesses are typically produced by a set of rules applied to
 /// the raw input. Note that the Defuzzifier per-se is an abstract class,
 /// whose actual implementation depends on the given template parameter.
-class Defuzzifier(DefuzzType type = DefuzzType.WeightedMean) : FamComponent!(RawData, Fitnesses) {
-	/// \param vars The output variables' classes
-	this(FuzzyClass[][string] classes) pure { super(classes); }
+class Defuzzifier : FamComponent!(RawData, Fitnesses) {
+	mixin famComponentChild;
 
 	override abstract RawData opCall(Fitnesses fitnesses);
 }
 
 /// Specialized Defuzzifier which calculates the weighted mean of the input
-class Defuzzifier(DefuzzType type : DefuzzType.WeightedMean) : FamComponent!(RawData, Fitnesses) {
-	this(FuzzyClass[][string] classes) pure { super(classes); }
+class WeightedMeanDefuzzifier : Defuzzifier {
+	mixin famComponentChild;
 
 	/// Given a map of fitnesses like
 	/// \code
@@ -86,7 +98,7 @@ class Defuzzifier(DefuzzType type : DefuzzType.WeightedMean) : FamComponent!(Raw
 	/// \code
 	/// { "force" => 5 }
 	/// \endcode
-	override RawData opCall(Fitnesses fitnesses)  {
+	override RawData opCall(Fitnesses fitnesses) pure {
 		RawData data;
 		double[string] weights;
 		foreach (varname, varclasses; classes) {
@@ -118,4 +130,12 @@ class Defuzzifier(DefuzzType type : DefuzzType.WeightedMean) : FamComponent!(Raw
 	}
 }
 
-// TODO: Defuzzifier Area
+class AreaDefuzzifier : Defuzzifier {
+	mixin famComponentChild;
+
+	// TODO: Defuzzifier Area
+	override RawData opCall(Fitnesses fitnesses) pure {
+		RawData data;
+		return data;
+	}
+}

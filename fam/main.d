@@ -1,4 +1,4 @@
-import fam.fuzzifier, fam.types;
+import fam.fuzzifier, fam.types, fam.fam;
 import std.stdio;
 
 void main() {
@@ -24,6 +24,8 @@ void main() {
 	RawData data = ["angle": -22];
 	writeln(fuzzifier(data));
 
-	auto defuzz = new Defuzzifier!(DefuzzType.WeightedMean)(outvars);
+	auto defuzz = new WeightedMeanDefuzzifier(outvars);
 	writeln(defuzz(["force.NM": 0.3, "force.NS": 0.5]));
+
+	auto fam = Fam.fromFile("fam.defs");
 }

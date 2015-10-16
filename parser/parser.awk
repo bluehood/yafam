@@ -46,6 +46,6 @@ function parse(string, ss, toks, f) {
    gsub(/\]/,")",result);
    gsub(/\{/,"[",result);
    gsub(/\}/,"]",result);
-   body = "\treturn " result ";";
-   print "rules[\"" ss[2] "\"] ~= " header "\n" body "\n};"
+   body = "\t\treturn " result ";";
+   print "\trules[\"" ss[2] "\"] ~= " header "\n" body "\n\t};"
 }

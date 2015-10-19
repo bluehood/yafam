@@ -1,6 +1,6 @@
-module fam.fuzzifier;
+module yafam.runtime.fuzzifier;
 
-import fam.types;
+import yafam.runtime.types;
 
 class FamComponent(R, T) {
 	/// \param classes The input variables' classes
@@ -51,10 +51,10 @@ class Fuzzifier : FamComponent!(Fitnesses, RawData) {
 		Fitnesses fitnesses;
 		foreach (varname, value; data) {
 			// Get possible classes for this variable
-			const auto cls = classes[varname];
+			const cls = classes[varname];
 			// Get fit for each class
 			foreach (fclass; cls) {
-				const auto fitness = fclass.fit(value);
+				const fitness = fclass.fit(value);
 				fitnesses[varname ~ "." ~ fclass.name] = fitness;	
 			}
 		}
@@ -99,7 +99,7 @@ class WeightedMeanDefuzzifier : Defuzzifier {
 					fitness = fitnesses[varname ~ "." ~ fclass.name];
 
 				// Get the mean value of this class
-				const auto mean = fclass.mean;
+				const mean = fclass.mean;
 
 				if (varname in data) {
 					data[varname] += mean * fitness;

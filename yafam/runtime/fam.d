@@ -1,6 +1,6 @@
-module fam.fam;
+module yafam.runtime.fam;
 
-import fam.fuzzifier, fam.parser;
+import yafam.runtime.fuzzifier;
 
 class Fam {
 	private this(Fuzzifier fuzz, Defuzzifier defuzz) {

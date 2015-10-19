@@ -1,4 +1,4 @@
-import fam.fuzzifier, fam.types, fam.fam;
+import yafam.runtime;
 import std.stdio;
 
 void main() {
@@ -27,5 +27,5 @@ void main() {
 	auto defuzz = new WeightedMeanDefuzzifier(outvars);
 	writeln(defuzz(["force.NM": 0.3, "force.NS": 0.5]));
 
-	auto fam = Fam.fromFile("fam.defs");
+	//auto fam = Fam.fromFile("fam.defs");
 }

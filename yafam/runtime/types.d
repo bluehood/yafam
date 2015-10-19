@@ -1,4 +1,4 @@
-module fam.types;
+module yafam.runtime.types;
 
 import std.algorithm : sort, isSorted, sum;
 debug import std.stdio : writef;

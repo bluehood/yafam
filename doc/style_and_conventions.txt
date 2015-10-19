@@ -1,0 +1,9 @@
+We use D Style (http://dlang.org/dstyle.html) where not specified otherwise,
+and Ddoc (http://dlang.org/ddoc.html) comments are used to document code.
+
+The things in which we willingly deviate from D Style are:
+1) indentation is 8 spaces
+2) braces are always
+   word {
+           /* content */
+   }

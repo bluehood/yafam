@@ -3,19 +3,9 @@ module fam.fuzzifier;
 import fam.types;
 
 class FamComponent(R, T) {
-	/// Constructs a fam component without classes.
-	/// Classes can be added later via `setVar()`
-	package this() {}
-
 	/// \param classes The input variables' classes
-	this(FuzzyClass[][string] classes) pure {
+	this(FuzzyClass[][string] classes) {
 		this.classes = classes;
-	}
-
-	/// Sets a list of classes for a variable. If that variable
-	/// was already in this component, it gets replaced.
-	package void setVar(string varname, FuzzyClass[] classes) {
-		this.classes[varname] = classes;
 	}
 
 	abstract R opCall(T data);
@@ -24,9 +14,7 @@ class FamComponent(R, T) {
 }
 
 private mixin template famComponentChild() {
-	package this() {}
-
-	this(FuzzyClass[][string] classes) pure {
+	this(FuzzyClass[][string] classes) {
 		super(classes);
 	}
 }
@@ -59,7 +47,7 @@ class Fuzzifier : FamComponent!(Fitnesses, RawData) {
 	/// \code
 	/// { "angle.small" => 0.4, "angle.neg_large => 0.1 }
 	/// \endcode
-	override Fitnesses opCall(RawData data) pure {
+	override Fitnesses opCall(RawData data) {
 		Fitnesses fitnesses;
 		foreach (varname, value; data) {
 			// Get possible classes for this variable
@@ -98,7 +86,7 @@ class WeightedMeanDefuzzifier : Defuzzifier {
 	/// \code
 	/// { "force" => 5 }
 	/// \endcode
-	override RawData opCall(Fitnesses fitnesses) pure {
+	override RawData opCall(Fitnesses fitnesses) {
 		RawData data;
 		double[string] weights;
 		foreach (varname, varclasses; classes) {
@@ -134,7 +122,7 @@ class AreaDefuzzifier : Defuzzifier {
 	mixin famComponentChild;
 
 	// TODO: Defuzzifier Area
-	override RawData opCall(Fitnesses fitnesses) pure {
+	override RawData opCall(Fitnesses fitnesses) {
 		RawData data;
 		return data;
 	}

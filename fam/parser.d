@@ -16,7 +16,7 @@ import std.string : format;
 /// `out <out_var_name>
 /// 	(like in var)`
 /// \endcode
-package Tuple!(Fuzzifier, Defuzzifier) parseDefs(string defsFile) {
+Tuple!(Fuzzifier, Defuzzifier) parseDefs(string defsFile) {
 	auto file = File(defsFile, "r");
 
 	FuzzyClass[][string] invars, outvars;	

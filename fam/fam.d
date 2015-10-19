@@ -8,10 +8,10 @@ class Fam {
 		defuzzifier = defuzz;
 	}
 
-	static Fam fromFile(string defsFile) {
+	/*static Fam fromFile(string defsFile) {
 		auto components = parseDefs(defsFile);
 		return new Fam(components.expand);
-	}
+	}*/
 
 	private Fuzzifier fuzzifier;
 	private Defuzzifier defuzzifier;

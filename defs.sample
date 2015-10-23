@@ -1,0 +1,10 @@
+using Areas
+
+in angle
+	NS: 1, 2, 3, 4
+	NM: 2, 3, 4, 5
+	PS: 3, 3, 4, 4
+
+out force
+	ZE: 0, 2, 5, 6
+	NM: -3, 2, 1, -5

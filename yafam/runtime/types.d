@@ -1,3 +1,6 @@
+/**
+ * Authors: E. Guiraud, G. Parolini
+ */
 module yafam.runtime.types;
 
 import std.algorithm : sort, isSorted, sum;

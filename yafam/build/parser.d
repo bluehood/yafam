@@ -1,3 +1,6 @@
+/**
+ * Authors: E. Guiraud, G. Parolini
+ */
 module yafam.build.parser;
 
 import yafam.runtime.types;
@@ -6,9 +9,9 @@ import std.array : split;
 
 package {
 	enum ErrLevel {
-		Error, ///< Indicates an unrecoverable error
-		Warn,  ///< Indicates a non-fatal error
-		Info   ///< Indicates an informative message
+		Error, /// Indicates an unrecoverable error
+		Warn,  /// Indicates a non-fatal error
+		Info   /// Indicates an informative message
 	}
 
 	string toString(in ErrLevel lv) {
@@ -37,7 +40,7 @@ package {
 }
 
 /// Parses a defs file containing the following directives:
-/// \code
+/// ------------------------------------
 /// `using <defuzzifier_name>`
 /// `in <in_var_name>
 /// 	classname: a, b, c, d
@@ -46,13 +49,13 @@ package {
 /// `
 /// `out <out_var_name>
 /// 	(like in var)`
-/// \endcode
+/// ------------------------------------
 /// and outputs a D file containing the FuzzyClass definitions
 /// for the runtime to use. The runtime will expect to find
 /// a class named `<defuzzifier_name>Defuzzifier` in the searched
-/// modules (e.g. `using WeightedMean` will use `WeightedMeanDefuzzifier`.
-/// \returns `true` if the file was parsed correctly, `false` otherwise.
+/// modules (e.g. `using WeightedMean` will use `WeightedMeanDefuzzifier`).
 /// This allows the user to define his own defuzzifying algorithms.
+/// Returns: `true` if the file was parsed correctly, `false` otherwise.
 bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 	auto file = File(srcFile, "r");
 

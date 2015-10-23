@@ -1,9 +1,13 @@
+/**
+ * Authors: E. Guiraud, G. Parolini
+ */
 module yafam.runtime.fuzzifier;
 
 import yafam.runtime.types;
 
 class FamComponent(R, T) {
-	/// \param classes The input variables' classes
+	/// Param:
+	/// 	classes = The input variables' classes
 	this(FuzzyClass[][string] classes) {
 		this.classes = classes;
 	}
@@ -26,27 +30,27 @@ private mixin template famComponentChild() {
 /// is a double between 0 and 1.
 /// Once created, a Fuzzifier acts like a functor which can be called
 /// via the call operator, like:
-/// \code{.d}
+/// ------------------------------------
 /// Fuzzifier f = new Fuzzifier(vars);
 /// auto fitnesses = f(data);
-/// \endcode
+/// ------------------------------------
 class Fuzzifier : FamComponent!(Fitnesses, RawData) {
 	mixin famComponentChild;
 
 	/// Converts raw input data (passed as a map
 	/// varname => value) into a Fitnesses result.
 	/// For example, if passed
-	/// \code
+	/// ------------------------------------
 	/// { "angle" => 0.03, ... }
-	/// \endcode
+	/// ------------------------------------
 	/// with one of the FuzzyClasses being:
-	/// \code
+	/// ------------------------------------
 	/// { "angle" => [{ "small" => [-0.5 ~ 0.5] }, { "neg_large" => [-2 ~ -0.2] }] }
-	/// \endcode
+	/// ------------------------------------
 	/// the output will be like:
-	/// \code
+	/// ------------------------------------
 	/// { "angle.small" => 0.4, "angle.neg_large => 0.1 }
-	/// \endcode
+	/// ------------------------------------
 	override Fitnesses opCall(RawData data) {
 		Fitnesses fitnesses;
 		foreach (varname, value; data) {
@@ -77,15 +81,15 @@ class WeightedMeanDefuzzifier : Defuzzifier {
 	mixin famComponentChild;
 
 	/// Given a map of fitnesses like
-	/// \code
+	/// ------------------------------------
 	/// { "force.neg_small" => 0.1, "force.zero" => 0.4 }
-	/// \endcode
+	/// ------------------------------------
 	/// takes the mean value of each class's range and outputs
 	/// the weighted mean of those values (where the weights are
 	/// the respective fitnesses):
-	/// \code
+	/// ------------------------------------
 	/// { "force" => 5 }
-	/// \endcode
+	/// ------------------------------------
 	override RawData opCall(Fitnesses fitnesses) {
 		RawData data;
 		double[string] weights;

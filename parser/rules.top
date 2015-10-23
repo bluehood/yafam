@@ -1,8 +1,9 @@
-module fam.rules;
-import fam.types;
+module yafam.runtime.rules;
+
+import yafam.runtime.types;
 import std.algorithm : min, max;
 
-///our array of rules
+/// The array of rules
 Rule[][string] rules;
 
 static this() {

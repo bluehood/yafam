@@ -1,3 +1,6 @@
+/**
+ * Authors: E. Guiraud, G. Parolini
+ */
 module yafam.runtime;
 
 /// Provides access to the interface of the Fam component

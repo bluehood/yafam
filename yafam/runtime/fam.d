@@ -1,3 +1,6 @@
+/**
+ * Authors: E. Guiraud, G. Parolini
+ */
 module yafam.runtime.fam;
 
 import yafam.runtime.fuzzifier;

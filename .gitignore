@@ -2,4 +2,6 @@
 *~
 *.o
 a.out
-fam/rules.d
+rules.d
+doc
+*.html

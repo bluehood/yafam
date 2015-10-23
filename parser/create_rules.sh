@@ -14,7 +14,7 @@ BASEDIR="$(dirname $(getpath $0))"
 
 TOP="$BASEDIR/rules.top"
 BOTTOM="$BASEDIR/rules.bottom"
-TARGET="$BASEDIR/../fam/rules.d"
+TARGET="$BASEDIR/../yafam/runtime/rules.d"
 
 if (( $# < 1 )); then
    echo "usage: $0 <rule file>";

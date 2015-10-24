@@ -27,5 +27,5 @@ void main() {
 	auto defuzz = new WeightedMeanDefuzzifier(outvars);
 	writeln(defuzz(["force.NM": 0.3, "force.NS": 0.5]));
 
-	//auto fam = Fam.fromFile("fam.defs");
+	writeln(Fam.process(data));
 }

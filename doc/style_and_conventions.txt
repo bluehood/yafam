@@ -7,3 +7,12 @@ The things in which we willingly deviate from D Style are:
    word {
            /* content */
    }
+
+Used keywords / attributes
+---------------------------
+We currently don't use the following keywords / attributes not to overly bloat the code:
+@trusted
+@nogc
+@nothrow
+pure (except for very small and plainly 'functional' functions)
+scope (as a storage class; but we *do* use 'in')

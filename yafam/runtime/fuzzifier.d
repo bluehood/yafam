@@ -105,13 +105,8 @@ class WeightedMeanDefuzzifier : Defuzzifier {
 				// Get the mean value of this class
 				const mean = fclass.mean;
 
-				if (varname in data) {
-					data[varname] += mean * fitness;
-					weights[varname] += fitness;
-				} else {
-					data[varname] = mean * fitness;
-					weights[varname] = fitness;
-				}
+				data[varname] += mean * fitness;
+				weights[varname] += fitness;
 			}
 		}
 		// Normalize data on weights

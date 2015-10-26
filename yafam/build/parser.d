@@ -5,7 +5,7 @@ module yafam.build.parser;
 
 import yafam.runtime.types;
 import std.typecons, std.stdio, std.string;
-import std.array : split;
+import std.array : split, appender;
 import std.conv : to;
 
 package {
@@ -28,15 +28,15 @@ package {
 
 	/// Functor used to output an error message along with the corresponding line number
 	class Errmsg {
-		this(ref int lineno) {
+		this(int* lineno) {
 			this.lineno = lineno;
 		}
 
 		void opCall(in ErrLevel lv, lazy string msg) {
-			stderr.writefln("On line %d | %s: %s", lineno, lv.toString, msg);
+			stderr.writefln("On line %d | %s: %s", *lineno, lv.toString, msg);
 		}
 
-		private int lineno;
+		private int* lineno;
 	}
 }
 
@@ -67,13 +67,13 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 	string curVar = null;
 
 	int lineno = 1;
-	auto errmsg = scoped!Errmsg(lineno);
+	auto errmsg = scoped!Errmsg(&lineno);
 		
 	auto setDefuzzType = delegate (in string newDefuzzName) {
 		if (usingDeclFound) {
 			errmsg(ErrLevel.Error,
-				"Attempted to define type of Defuzzifier,
-				which was already of type " ~ defuzzName
+				"Attempted to define type of Defuzzifier, "
+				"which was already of type " ~ defuzzName
 				~ " to " ~ newDefuzzName);
 			return false;
 		}		
@@ -90,13 +90,13 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 			// A class definition (':' is not allowed for var names)
 			if (curVar == null) {
 				errmsg(ErrLevel.Error,
-					"Attempted fuzzy class definition outside
-					of a variable declaration body.");
+					"Attempted fuzzy class definition outside "
+					"of a variable declaration body.");
 				return false;
 			} else {
 				errmsg(ErrLevel.Warn,
-					"Starting a class name with 'in', 'out' or 'using'
-					is ambiguous and should be avoided.");
+					"Starting a class name with 'in', 'out' or 'using' "
+					"is ambiguous and should be avoided.");
 			}
 			return true;
 		}
@@ -134,13 +134,14 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 		// Now parse the delimiters
 		auto delims = splitted[1].split(',');
 		if (delims.length != 4) {
-			errmsg(ErrLevel.Error, format("Wrong number of class delimiters: %d instead of 4.", delims.length));
+			errmsg(ErrLevel.Error, format("Wrong number of class "
+				"delimiters: %d instead of 4.", delims.length));
 			return false;
 		}
 		
 		double[4] delimVals;
 		for (int i = 0; i < 4; ++i) {
-			const str = delims[i];
+			const str = delims[i].strip;
 			switch (str) {
 			case "inf":
 				delimVals[i] = double.infinity;
@@ -152,11 +153,12 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 				{
 					scope (failure) {
 						errmsg(ErrLevel.Error,
-							"Failed to parse delimiter " ~ delims[i] ~ ".");
+							"Failed to parse delimiter " 
+							~ str ~ ".");
 						return false;
 					}
 					import std.string : strip;
-					delimVals[i] = to!double(delims[i].strip);
+					delimVals[i] = to!double(str);
 				}
 			}
 		}
@@ -184,10 +186,12 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 	// Parse the file
 	string line;
 	while ((line = file.readln()) !is null) {
-		if (line.strip.length == 0) continue;
+		line = line.strip;
+		if (line.length == 0 || line[0] == '#') continue;
 
 		// Get directive type peeking first word
 		auto splitted = line.split();
+		debug stderr.writeln("first token: " ~ splitted[0]);
 		switch (splitted[0]) {
 			case "using":
 				if (!setDefuzzType(splitted[1])) {
@@ -211,8 +215,8 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 			default:
 				if (curVar == null) {
 					errmsg(ErrLevel.Error,
-						"Attempted fuzzy class definition outside
-						of a variable declaration body.");
+						"Attempted fuzzy class definition outside "
+						"of a variable declaration body.");
 					return false;
 				}
 				if (!addClassDefinition(line))
@@ -244,11 +248,33 @@ Defuzzifier defuzzifier;
 
 static this() {");
 
+	// Convert the delimiters array into a string
+	// writing 'double.infinity' instead of 'inf'.
+	auto stringify(double[4] ary) {
+		import std.math : isInfinity;
+
+		auto buf = appender!string("[");
+		buf.reserve(80);
+		foreach (i, v; ary) {
+			if (v.isInfinity) {
+				if (v < 0)
+					buf.put('-');
+				buf.put("double.infinity");
+			} else {
+				buf.put(v.to!string);
+			}
+			if (i < 3)
+				buf.put(", ");
+		}
+		buf.put("]");
+		return buf.data;
+	}
+
 	foreach (varname, var; invars) {
 		file.writeln("\tinvars[\"" ~ varname ~ "\"] = [");
 		foreach (fclass; var) {
 			file.writefln("\t\tnew FuzzyClass(\"%s\", %s),",
-					fclass.name , fclass.delimiters); 
+					fclass.name , stringify(fclass.delimiters));
 		}
 		file.writeln("\t];");
 	}
@@ -257,7 +283,7 @@ static this() {");
 		file.writeln("\toutvars[\"" ~ varname ~ "\"] = [");
 		foreach (fclass; var) {
 			file.writefln("\t\tnew FuzzyClass(\"%s\", %s),",
-					fclass.name , fclass.delimiters); 
+					fclass.name , stringify(fclass.delimiters));
 		}
 		file.writeln("\t];");
 	}

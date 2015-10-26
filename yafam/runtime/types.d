@@ -25,7 +25,8 @@ class FuzzyClass {
 		double[] tmp = delimiters;
 		sort(tmp);
 		this.delimiters = tmp;
-		debug writef("[class %s] delimiters: %s\n", this.name, this.delimiters);
+		debug stderr.writef("[class %s] delimiters: %s\n", 
+				this.name, this.delimiters);
 	}
 
 	Fitness fit(double x) pure const {

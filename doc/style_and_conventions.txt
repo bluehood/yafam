@@ -14,5 +14,6 @@ We currently don't use the following keywords / attributes not to overly bloat t
 @trusted
 @nogc
 @nothrow
+@safe
 pure (except for very small and plainly 'functional' functions)
 scope (as a storage class; but we *do* use 'in')

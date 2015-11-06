@@ -1,14 +1,19 @@
 DC := dmd
 
-.PHONY: parser
-all: fam parser
+.PHONY: default
+default:
+	echo "no default target"
 
-parser: parserMain.d yafam/build/parser.d yafam/runtime/types.d
-	$(DC) $^ -ofparser.x
+build: yafam/build/*.d yafam/runtime/types.d
+	$(DC) $^ -ofbin/parser
 	
-fam: main.d yafam/runtime/*.d
-	$(DC) $^ -offam
+runtime: yafam/runtime/*.d
+	$(DC) $^ -ofbin/yafam
 
 .PHONY: clean
 clean:
-	rm -f *.o fam parser.x
+	rm -f *.o \
+                bin/yafam \
+                bin/parser \
+                yafam/runtime/rules.d \
+                yafam/runtime/defs.d

@@ -1,3 +1,5 @@
+module yafam.runtime.yafam;
+
 import yafam.runtime, yafam.runtime.defs : invars;
 import std.stdio, std.conv, std.string;
 

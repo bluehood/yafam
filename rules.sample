@@ -1,3 +1,0 @@
-# sample rules file
-invar.low => outvar.high
-invar.high => outvar.low

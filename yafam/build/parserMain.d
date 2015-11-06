@@ -5,7 +5,7 @@ import std.stdio, std.path;
 import famparser = yafam.build.parser;
 
 int main(string[] args) {
-	string dstFile = buildNormalizedPath(dirName(args[0]), "yafam/runtime/defs.d");
+	string dstFile = buildNormalizedPath(dirName(args[0]), "../yafam/runtime/defs.d");
 
 	if (args.length < 2) {
 		stderr.writeln("Usage: " ~ args[0] ~ " <defs_file> [outfile]");	

@@ -12,3 +12,5 @@ public import yafam.runtime.rules;
 /// Provides the type declarations and aliases, as well as 
 /// the FuzzyClass class.
 public import yafam.runtime.types;
+/// Provides the custom exceptions
+public import yafam.runtime.exceptions;

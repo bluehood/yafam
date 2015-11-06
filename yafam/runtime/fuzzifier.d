@@ -3,7 +3,7 @@
  */
 module yafam.runtime.fuzzifier;
 
-import yafam.runtime.types;
+import yafam.runtime.types, yafam.runtime.exceptions;
 
 class FamComponent(R, T) {
 	/// Param:
@@ -55,6 +55,9 @@ class Fuzzifier : FamComponent!(Fitnesses, RawData) {
 		Fitnesses fitnesses;
 		foreach (varname, value; data) {
 			// Get possible classes for this variable
+			if (varname !in classes)
+				throw new InvalidDataError("Fuzzifier: passed in "
+						~ "inexisting variable " ~ varname);
 			const cls = classes[varname];
 			// Get fit for each class
 			foreach (fclass; cls) {

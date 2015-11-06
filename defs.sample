@@ -1,10 +1,9 @@
-using Area
+using WeightedMean
 
-in angle
-	NS: 1, 2, 3, 4
-	NM: 2, 3, 4, 5
-	PS: 3, 3, 4, 4
+in invar
+	low: 0, 1, 5, 6
+	high: 5, 6, 9, 10
 
-out force
-	ZE: 0, 2, 5, 6
-	NM: -3, 2, 1, -5
+out outvar 
+	low: 0, 0, 0, 0
+	high: 1, 1, 1, 1

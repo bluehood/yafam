@@ -3,6 +3,7 @@ using WeightedMean
 in invar
 	low: 0, 1, 5, 6
 	high: 5, 6, 9, 10
+	symmetric
 
 in invar2
         low: 0, 2, 10, 12

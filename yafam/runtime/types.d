@@ -30,14 +30,19 @@ class FuzzyClass {
 	}
 
 	Fitness fit(double x) pure const {
+		import std.math : isInfinity;
+
 		if (x <= delimiters[0] || x >= delimiters[3]) 
 			return 0;
-		if (x >= delimiters[1] && x <= delimiters[2]) 
+		if (delimiters[1] <= x && x <= delimiters[2]) 
 			return 1;
-		if (x < delimiters[1])
+		if (x < delimiters[1]) {
+			if (delimiters[0].isInfinity) return 1;
 			return (x - delimiters[0]) / (delimiters[1] - delimiters[0]);
-		else
+		} else {
+			if (delimiters[3].isInfinity) return 1;
 			return (delimiters[3] - x) / (delimiters[3] - delimiters[2]);
+		}
 	}
 
 	@property

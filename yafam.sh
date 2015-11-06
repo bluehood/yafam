@@ -1,7 +1,7 @@
 #!/bin/bash
 
 usage() {
-        echo "usage: $0 <def_file> <rule_file>"
+        echo "usage: $0 [-b] <def_file> <rule_file>"
         exit 1
 }
 

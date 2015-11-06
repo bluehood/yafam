@@ -85,24 +85,6 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 		return true;
 	};
 
-	auto checkForAmbiguity = delegate (in string line) {
-		if (line.indexOf(':') > 0) {
-			// A class definition (':' is not allowed for var names)
-			if (curVar == null) {
-				errmsg(ErrLevel.Error,
-					"Attempted fuzzy class definition outside "
-					"of a variable declaration body.");
-				return false;
-			} else {
-				errmsg(ErrLevel.Warn,
-					"Starting a class name with 'in', 'out' or 'using' "
-					"is ambiguous and should be avoided.");
-			}
-			return true;
-		}
-		return false;
-	};
-
 	enum VarType { In, Out, None };
 	auto curVarType = VarType.None;
 
@@ -112,8 +94,21 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 		auto vars = curVarType == VarType.In ? &invars : &outvars;
 
 		// A line has the form: variable name: val1, val2, val3, val4
+		// OR `symmetric`.
+		if (line == "symmetric") {
+			auto var = (*vars)[curVar];
+			double[4] delimVals;
+			for (int i = 0; i < var.length; ++i) {
+				const varName = "sym-" ~ var[i].name;
+				for (int j = 0; j < 4; ++j)
+					delimVals[j] = -var[i].delimiters[3-j];
+				(*vars)[curVar] ~= new FuzzyClass(varName, delimVals);
+			}
+			return true;
+		}
+
 		// First of all, split by ':'.
-		auto splitted = line.strip.split(':');
+		auto splitted = line.split(':');
 		if (splitted.length < 2) {
 			errmsg(ErrLevel.Error, "Invalid line: " ~ line);
 			return false;
@@ -130,8 +125,7 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 				}
 			}
 		}
-	
-		// Now parse the delimiters
+
 		auto delims = splitted[1].split(',');
 		if (delims.length != 4) {
 			errmsg(ErrLevel.Error, format("Wrong number of class "
@@ -200,17 +194,10 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 				}
 				break;
 			case "in", "out":
-				// Check this is actually a var definition rather than
-				// a class with a name starting with "in".
-				if (checkForAmbiguity(line)) {
-					if (!addClassDefinition(line))
-						return false;
-				} else {
-					// A variable definition
-					curVarType = splitted[0] == "in" ? VarType.In : VarType.Out;
-					if (!addVarDefinition(splitted[1 .. $].join(" ")))
-						return false;
-				}
+				// A variable definition
+				curVarType = splitted[0] == "in" ? VarType.In : VarType.Out;
+				if (!addVarDefinition(splitted[1 .. $].join(" ")))
+					return false;
 				break;
 			default:
 				if (curVar == null) {

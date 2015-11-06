@@ -11,7 +11,7 @@ fi
 
 while (($# > 0)); do
         case $1 in
-        "-b" | "--build") BUILDONLY=true; shift;;
+        "-b" | "--build") BUILDONLY=1; shift;;
         \-*) usage;;
         *) break;;
         esac
@@ -27,7 +27,7 @@ make build &&
 make runtime
 
 if [[ $? -eq 0 ]]; then
-        [[ $BUILDONLY ]] && ./bin/yafam || exit 0
+        [[ $BUILDONLY -eq 1 ]] && exit 0 || ./bin/yafam
 else
         echo "there was an error building yafam"
         exit 2

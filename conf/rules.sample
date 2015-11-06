@@ -1,3 +1,7 @@
 # sample rules file
-invar.low and invar2.low => outvar.high
-invar.high and invar2.high => outvar.low
+pos.NH => force.sym-NH
+pos.NM => force.sym-NM
+pos.NL => force.sym-NL
+pos.sym-NL => force.NL
+pos.sym-NM => force.NM
+pos.sym-NH => force.NH

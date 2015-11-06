@@ -16,14 +16,14 @@ void updateForcing(std::atomic<double>& forcing) {
 int main() {
 	const double STEP = 0.1;
 	const double AMPLITUDE = 100;
-	const char *VARNAME = "invar";
+	const char *VARNAME = "pos";
 
 	std::atomic<double> forcing(0);
 
 	PosVec x0 = { AMPLITUDE, 0. };
 	ForceVec f = {
 		[] (double, PosVec x) { return x[1]; },
-		[&forcing] (double t, PosVec x) {
+		[&forcing] (double, PosVec x) {
 			static const double K = 0.1;
 			return -K*x[0] + forcing;	
 		}
@@ -35,8 +35,9 @@ int main() {
 	while (true) {
 		PosVec x = solver.step();
 		double t = solver.getTime();
-		std::cerr << "forcing = " << forcing << std::endl;
+                std::cerr << "forcing: " << forcing << "\n";
 		std::cout << VARNAME << " " << x[0] << std::endl;
+                std::this_thread::sleep_for(std::chrono::milliseconds(10));
 	}
 
 	return 0;

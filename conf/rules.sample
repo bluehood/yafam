@@ -1,7 +1,7 @@
 # sample rules file
-pos.NH => force.sym-NH
-pos.NM => force.sym-NM
-pos.NL => force.sym-NL
-pos.sym-NL => force.NL
-pos.sym-NM => force.NM
-pos.sym-NH => force.NH
+vel.NH => force.sym-NH
+vel.NM => force.sym-NM
+vel.NL => force.sym-NL
+vel.sym-NL => force.NL
+vel.sym-NM => force.NM
+vel.sym-NH => force.NH

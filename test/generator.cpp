@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <atomic>
+#include <cmath>
 #include "solver.h"
 
 void updateForcing(std::atomic<double>& forcing) {
@@ -16,7 +17,7 @@ void updateForcing(std::atomic<double>& forcing) {
 int main() {
 	const double STEP = 0.1;
 	const double AMPLITUDE = 100;
-	const char *VARNAME = "pos";
+	const char *VARNAME = "vel";
 
 	std::atomic<double> forcing(0);
 
@@ -35,9 +36,11 @@ int main() {
 	while (true) {
 		PosVec x = solver.step();
 		double t = solver.getTime();
-                std::cerr << "forcing: " << forcing << "\n";
-		std::cout << VARNAME << " " << x[0] << std::endl;
+                std::cerr << x[0] << " " << x[1] << "\n";
+		std::cout << VARNAME << " " << x[1] << std::endl;
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                if (std::abs(x[1]) < 3 && std::abs(x[0]) < 2)
+                        forcing = 1e3;
 	}
 
 	return 0;

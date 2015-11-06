@@ -1,9 +1,9 @@
 using WeightedMean
 
-in pos
-        NH: -inf, -100, -70, -50
-        NM: -60, -40, -20, -10
-        NL: -15, -10, -5, 0
+in vel
+        NH: -inf, -30, -25, -15
+        NM: -20, -15, -10, -5
+        NL: -7.5, -4, -1, 0
         symmetric
 
 out force

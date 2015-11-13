@@ -187,27 +187,27 @@ bool parseDefs(in string srcFile, in string dstFile = "defs.d") {
 		auto splitted = line.split();
 		debug stderr.writeln("first token: " ~ splitted[0]);
 		switch (splitted[0]) {
-			case "using":
-				if (!setDefuzzType(splitted[1])) {
-					// There were errors: abort parsing
-					return false;
-				}
-				break;
-			case "in", "out":
-				// A variable definition
-				curVarType = splitted[0] == "in" ? VarType.In : VarType.Out;
-				if (!addVarDefinition(splitted[1 .. $].join(" ")))
-					return false;
-				break;
-			default:
-				if (curVar == null) {
-					errmsg(ErrLevel.Error,
-						"Attempted fuzzy class definition outside "
-						"of a variable declaration body.");
-					return false;
-				}
-				if (!addClassDefinition(line))
-					return false;
+		case "using":
+			if (!setDefuzzType(splitted[1])) {
+				// There were errors: abort parsing
+				return false;
+			}
+			break;
+		case "in", "out":
+			// A variable definition
+			curVarType = splitted[0] == "in" ? VarType.In : VarType.Out;
+			if (!addVarDefinition(splitted[1 .. $].join(" ")))
+				return false;
+			break;
+		default:
+			if (curVar == null) {
+				errmsg(ErrLevel.Error,
+					"Attempted fuzzy class definition outside "
+					"of a variable declaration body.");
+				return false;
+			}
+			if (!addClassDefinition(line))
+				return false;
 		}
 
 		++lineno;

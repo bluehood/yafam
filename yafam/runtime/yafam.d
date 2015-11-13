@@ -7,7 +7,7 @@ void main() {
         RawData data;
 
         while (true) {
-                if(stdin.eof) {
+                if (stdin.eof) {
                         stdin.clearerr();
                 } else {
                         for (int i = 0; i < invars.length; ++i) {
@@ -22,7 +22,7 @@ void main() {
                                         throw new InvalidDataError("Invalid data: " ~ splitted[1]);
                         }
                 }
-                foreach(key, value; Fam.process(data))
+                foreach (key, value; Fam.process(data))
                         writefln("%s %s", key, value);
                 stdout.flush();
         }
